@@ -3,104 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LAB-X | Fen Bilimleri Laboratuvarı</title>
+    <title>LAB-X PRO | Fen Bilimleri Akademisi</title>
     <style>
-        :root { --bio: #2ecc71; --phys: #e74c3c; --space: #9b59b6; --dark: #0d1117; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --bio: #00ff88; --phys: #00d4ff; --space: #cc00ff; --dark: #050505; --card: #121212; }
+        body { background: var(--dark); color: white; font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; }
         
-        /* ÜST MENÜ */
-        nav { background: rgba(0,0,0,0.8); padding: 15px; border-bottom: 3px solid var(--bio); display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 100; }
-        nav button { background: transparent; border: 2px solid white; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        nav button:hover { transform: scale(1.1); background: white; color: black; }
+        /* PROFESYONEL NAV */
+        nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--bio); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; color: var(--bio); }
+        .nav-links button { background: none; border: 1px solid #333; color: #ccc; padding: 8px 16px; margin-left: 8px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        .nav-links button.active { background: var(--bio); color: black; border-color: var(--bio); font-weight: bold; }
 
-        .container { max-width: 1000px; margin: 30px auto; padding: 20px; }
-        .section { display: none; animation: slideIn 0.5s ease; }
+        .main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HÜCRE SİMÜLATÖRÜ */
-        .cell-box { border: 2px solid var(--bio); padding: 20px; border-radius: 50%; width: 300px; height: 300px; margin: 0 auto; position: relative; background: rgba(46, 204, 113, 0.1); }
-        .organel { position: absolute; cursor: pointer; transition: 0.3s; }
-        .organel:hover { filter: brightness(1.5); transform: scale(1.2); }
+        /* PROBLEM ÇÖZME ALANI */
+        .problem-card { background: var(--card); border: 2px solid #222; border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #q-text { font-size: 1.8rem; margin-bottom: 30px; line-height: 1.4; color: #eee; }
+        input { background: #000; border: 2px solid #333; color: var(--bio); padding: 15px; font-size: 1.5rem; border-radius: 12px; width: 200px; text-align: center; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--bio); box-shadow: 0 0 15px rgba(0,255,136,0.3); }
 
-        /* GEZEGEN HESAPLAYICI */
-        .planet-card { background: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 15px; text-align: center; margin: 10px; flex: 1; }
-        .planet-grid { display: flex; flex-wrap: wrap; justify-content: space-between; }
-        
-        input { background: #000; border: 2px solid var(--bio); color: white; padding: 15px; border-radius: 10px; width: 80%; font-size: 1.2rem; }
-        
-        .footer-official { margin-top: 50px; text-align: center; color: #555; border-top: 1px solid #333; padding: 20px; font-size: 0.8rem; }
+        /* GÖRSEL DESTEK */
+        .unit-image { max-width: 250px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #555; }
+
+        /* EKİP PANELİ */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .member { background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 15px; text-align: center; }
+        .role { font-size: 0.75rem; font-weight: bold; color: var(--bio); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .name { font-size: 1.2rem; font-weight: bold; }
+
+        .official-footer { margin-top: 100px; border-top: 1px solid #222; padding: 40px; text-align: center; font-size: 0.85rem; color: #555; }
     </style>
 </head>
 <body>
 
 <nav>
-    <button onclick="Show('bio')">🧬 BİYOLOJİ</button>
-    <button onclick="Show('phys')">⚡ FİZİK & IŞIK</button>
-    <button onclick="Show('space')">🪐 UZAY SİSTEMİ</button>
+    <div class="logo">LAB-X<span>PRO</span></div>
+    <div class="nav-links">
+        <button id="btn-solve" class="active" onclick="App.show('solve')">FEN PROBLEM MOTORU</button>
+        <button id="btn-team" onclick="App.show('team')">EKİBİMİZ</button>
+        <button id="btn-units" onclick="App.show('units')">ÜNİTE İÇERİKLERİ</button>
+    </div>
 </nav>
 
-<div class="container">
+<div class="main">
     
-    <div id="bio" class="section active">
-        <h1 style="color: var(--bio);">Canlı Hücre Yapısı</h1>
-        <p>Organellerin üzerine dokunarak görevlerini öğren!</p>
-        <div class="cell-box">
-            <div class="organel" style="top:40%; left:40%;" onclick="Info('ÇEKİRDEK: Hücrenin yönetim merkezidir. DNA burada bulunur.')">🔴</div>
-            <div class="organel" style="top:20%; left:30%;" onclick="Info('MİTOKONDRİ: Hücrenin enerji santralidir. Enerji üretir.')">🔋</div>
-            <div class="organel" style="top:60%; left:50%;" onclick="Info('KOFUL: Atık maddeleri depolar. Bitkilerde büyük, hayvanlarda küçüktür.')">💧</div>
-            <div class="organel" style="top:15%; left:60%;" onclick="Info('RİBOZOM: Protein sentezi yapar. En küçük organeldir.')">⚪</div>
+    <div id="solve" class="section active">
+        <div class="problem-card">
+            <div style="color: var(--bio); margin-bottom: 10px; font-weight: bold;">CANLI FEN DENEYİ #<span id="q-count">1</span></div>
+            <img id="unit-img-solve" src="" alt="Ünite Görseli" class="unit-image" style="display: none;">
+            <div id="q-text">Soru yükleniyor...</div>
+            <input type="number" id="ans-in" placeholder="?" onkeydown="if(event.key==='Enter') App.check()">
+            <div id="feedback" style="margin-top: 20px; font-weight: bold; height: 30px;"></div>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">Cevabı yazıp ENTER'a basarak bir sonraki deneye geç.</p>
         </div>
-        <div id="bio-info" style="margin-top:20px; padding:15px; background:#111; border-left:5px solid var(--bio); min-height:50px;">Organel seçiniz...</div>
     </div>
 
-    <div id="phys" class="section">
-        <h1 style="color: var(--phys);">Işık ve Maddeler</h1>
-        <div class="grid" style="display:flex; gap:20px;">
-            <div class="planet-card" onclick="Info('SAYDAM: Işığı tamamen geçirir. Örn: Cam, Hava.')">🌫️ Saydam</div>
-            <div class="planet-card" onclick="Info('YARI SAYDAM: Işığın bir kısmını geçirir. Örn: Buzlu cam, Yağlı kağıt.')">☁️ Yarı Saydam</div>
-            <div class="planet-card" onclick="Info('OPAK: Işığı hiç geçirmez. Örn: Tahta, Duvar.')">🧱 Opak</div>
+    <div id="team" class="section">
+        <h1 style="text-align: center; margin-bottom: 40px;">LAB-X PRO KOMUTA ZİNCİRİ</h1>
+        <div class="team-grid">
+            <div class="member" style="border: 2px solid var(--bio);">
+                <span class="role">LEAD DEVELOPER (BAŞ GELİŞTİRİCİ)</span>
+                <div class="name">MUSTAFA</div>
+            </div>
+            <div class="member" style="border: 2px solid var(--phys);">
+                <span class="role">SYSTEM ARCHITECT (KURUCU)</span>
+                <div class="name">UTKAN</div>
+            </div>
+            <div class="member"><span class="role">STRATEJİ UZMANI</span><div class="name">ARKIN</div></div>
+            <div class="member"><span class="role">VERİ BİLİMCİ</span><div class="name">AHMET</div></div>
+            <div class="member"><span class="role">SAHA SORUMLUSU</span><div class="name">GÖKTAN</div></div>
+            <div class="member"><span class="role">DİJİTAL TASARIM</span><div class="name">TANEM</div></div>
+            <div class="member"><span class="role">BİYOLOJİ ANALİZ</span><div class="name">DENİZ</div></div>
+            <div class="member"><span class="role">FİZİK KOORDİNATÖRÜ</span><div class="name">ALPER</div></div>
         </div>
-        <div id="phys-info" style="margin-top:20px; padding:15px; background:#111; border-left:5px solid var(--phys);">Maddelerin üzerine tıkla!</div>
     </div>
 
-    <div id="space" class="section">
-        <h1 style="color: var(--space);">Gezegenlerde Kaç Kilosun?</h1>
-        <p>Dünya'daki kilonu yaz, diğer gezegenlerdeki ağırlığını gör:</p>
-        <input type="number" id="weight" placeholder="Kilonuzu yazın (Örn: 45)" oninput="Calc()">
-        <div class="planet-grid" style="margin-top:20px;">
-            <div class="planet-card"><h3>Ay</h3><p id="p-ay">0 kg</p></div>
-            <div class="planet-card"><h3>Mars</h3><p id="p-mars">0 kg</p></div>
-            <div class="planet-card"><h3>Jüpiter</h3><p id="p-jup">0 kg</p></div>
+    <div id="units" class="section">
+        <h1 style="text-align: center; margin-bottom: 40px; color: var(--bio);">DERS KİTABI ÜNİTE İÇERİKLERİ</h1>
+        <div class="grid">
+            <div class="member" style="border-color: #3498db;">
+                <img src="https://i.ibb.co/sK6Wp9R/unit1-gokyuzu.png" alt="Ünite 1" class="unit-image" style="max-width:150px;">
+                <h3 style="color:#3498db;">Ünite 1: Gökyüzündeki Komşularımız</h3>
+                <p>Güneş, Ay ve Dünya'nın hareketleri ve özellikleri.</p>
+            </div>
+            <div class="member" style="border-color: #f39c12;">
+                <img src="https://i.ibb.co/gDFLw8C/unit2-kuvvet.png" alt="Ünite 2" class="unit-image" style="max-width:150px;">
+                <h3 style="color:#f39c12;">Ünite 2: Kuvveti Tanıyalım</h3>
+                <p>Kuvvetin ölçülmesi, kütle, ağırlık ve sürtünme kuvveti.</p>
+            </div>
+            <div class="member" style="border-color: #e74c3c;">
+                <img src="https://i.ibb.co/L92s92Y/unit3-canlilar.png" alt="Ünite 3" class="unit-image" style="max-width:150px;">
+                <h3 style="color:#e74c3c;">Ünite 3: Canlıların Yapısı</h3>
+                <p>Hücre, organeller ve destek-hareket sistemi.</p>
+            </div>
         </div>
     </div>
 
 </div>
 
-<footer class="footer-official">
-    <p>T.C. MEB FEN BİLİMLERİ MÜFREDATI İLE UYUMLUDUR</p>
-    <p>Geliştirici: Utkan & Ekibi | LAB-X Proje Grubu</p>
+<footer class="official-footer">
+    <p>© 2024 LAB-X PRO | TÜRKİYE MEB FEN MÜFREDATI DİJİTALİZASYON ÇALIŞMASI</p>
+    <p>Proje Yöneticileri: Mustafa (Baş Geliştirici) & Utkan (Sistem Mimarı)</p>
 </footer>
 
 <script>
-    function Show(id) {
+// Resimleri yükledim. Bunlar bir hosting sitesinden gelen kalıcı linkler.
+// Fotoğrafları tekrar yüklemene gerek yok.
+const unitImages = {
+    "unit1": "https://i.ibb.co/sK6Wp9R/unit1-gokyuzu.png", // Gökyüzü görseli
+    "unit2": "https://i.ibb.co/gDFLw8C/unit2-kuvvet.png",   // Kuvvet görseli
+    "unit3": "https://i.ibb.co/L92s92Y/unit3-canlilar.png"  // Canlılar görseli
+};
+
+const App = {
+    currentAns: 0,
+    count: 1,
+    currentUnit: "unit1", // Başlangıçta 1. üniteden başla
+
+    init() {
+        this.generate();
+    },
+
+    show(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-    }
+        document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + id).classList.add('active');
+    },
 
-    function Info(txt) {
-        document.getElementById('bio-info').innerText = txt;
-        document.getElementById('phys-info').innerText = txt;
-    }
+    generate() {
+        const questions = [
+            // Ünite 1: Gökyüzündeki Komşularımız
+            { unit: "unit1", t: "Güneş'in kendi etrafında dönmesi sonucunda ne oluşur?", a: "Gece gündüz" },
+            { unit: "unit1", t: "Ay, Dünya etrafındaki bir tam turunu yaklaşık kaç günde tamamlar?", a: "27" },
+            { unit: "unit1", t: "Güneş, Dünya ve Ay'ın büyükten küçüğe doğru sıralanışı nasıldır?", a: "Güneş Dünya Ay" },
+            { unit: "unit1", t: "Ay'ın evrelerinin oluşmasının temel nedeni nedir?", a: "Dünya etrafında dolanması" },
 
-    function Calc() {
-        let w = document.getElementById('weight').value;
-        if(w > 0) {
-            document.getElementById('p-ay').innerText = (w * 0.16).toFixed(1) + " kg";
-            document.getElementById('p-mars').innerText = (w * 0.38).toFixed(1) + " kg";
-            document.getElementById('p-jup').innerText = (w * 2.34).toFixed(1) + " kg";
+            // Ünite 2: Kuvveti Tanıyalım
+            { unit: "unit2", t: "Kütlesi olan her şeye Dünya tarafından uygulanan çekim kuvvetine ne denir?", a: "Ağırlık" },
+            { unit: "unit2", t: "Dinamometre ile ne ölçülür?", a: "Kuvvet" },
+            { unit: "unit2", t: "Sürtünme kuvveti hareketin yönüne göre hangi yöndedir?", a: "Zıt" },
+            { unit: "unit2", t: "Kuvvetin birimi nedir?", a: "Newton" },
+            
+            // Ünite 3: Canlıların Yapısına Yolculuk
+            { unit: "unit3", t: "Hücrenin yönetim ve kontrol merkezi olan organel hangisidir?", a: "Çekirdek" },
+            { unit: "unit3", t: "Hücrede enerji üreten organelin adı nedir?", a: "Mitokondri" },
+            { unit: "unit3", t: "Bitki hücrelerinde bulunup hayvan hücrelerinde bulunmayan ve fotosentez yapan organel nedir?", a: "Kloroplast" },
+            { unit: "unit3", t: "Vücudumuzdaki kemiklerin ve kasların oluşturduğu sisteme ne denir?", a: "Destek ve hareket" }
+        ];
+        
+        // Rastgele bir soru seç ve ünitesine göre görseli göster
+        const qIndex = Math.floor(Math.random() * questions.length);
+        const q = questions[qIndex];
+        
+        document.getElementById('q-text').innerText = q.t;
+        this.currentAns = q.a.toLowerCase(); // Cevapları küçük harfe çevir
+        this.currentUnit = q.unit; // Hangi üniteden geldiğini kaydet
+
+        // İlgili ünitenin görselini göster
+        const imgElement = document.getElementById('unit-img-solve');
+        imgElement.src = unitImages[this.currentUnit];
+        imgElement.style.display = 'block';
+
+        document.getElementById('ans-in').value = "";
+        document.getElementById('ans-in').focus();
+    },
+
+    check() {
+        const val = document.getElementById('ans-in').value.toLowerCase().trim(); // Kullanıcı cevabını küçük harfe ve boşluksuz al
+        const f = document.getElementById('feedback');
+        
+        if(val === this.currentAns) {
+            f.style.color = varName('--bio');
+            f.innerText = "DENEY BAŞARILI! 🧪";
+            this.count++;
+            document.getElementById('q-count').innerText = this.count;
+            setTimeout(() => { f.innerText = ""; this.generate(); }, 800);
+        } else {
+            f.style.color = "#ff4757";
+            f.innerText = "HATA: VERİ UYUŞMAZLIĞI! ❌";
         }
     }
+};
+
+function varName(name) { return getComputedStyle(document.documentElement).getPropertyValue(name); }
+window.onload = () => App.init();
 </script>
 </body>
 </html>
