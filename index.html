@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAB-X | Fen Bilimleri Laboratuvarı</title>
+    <style>
+        :root { --bio: #2ecc71; --phys: #e74c3c; --space: #9b59b6; --dark: #0d1117; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        
+        /* ÜST MENÜ */
+        nav { background: rgba(0,0,0,0.8); padding: 15px; border-bottom: 3px solid var(--bio); display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 100; }
+        nav button { background: transparent; border: 2px solid white; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        nav button:hover { transform: scale(1.1); background: white; color: black; }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 20px; }
+        .section { display: none; animation: slideIn 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* HÜCRE SİMÜLATÖRÜ */
+        .cell-box { border: 2px solid var(--bio); padding: 20px; border-radius: 50%; width: 300px; height: 300px; margin: 0 auto; position: relative; background: rgba(46, 204, 113, 0.1); }
+        .organel { position: absolute; cursor: pointer; transition: 0.3s; }
+        .organel:hover { filter: brightness(1.5); transform: scale(1.2); }
+
+        /* GEZEGEN HESAPLAYICI */
+        .planet-card { background: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 15px; text-align: center; margin: 10px; flex: 1; }
+        .planet-grid { display: flex; flex-wrap: wrap; justify-content: space-between; }
+        
+        input { background: #000; border: 2px solid var(--bio); color: white; padding: 15px; border-radius: 10px; width: 80%; font-size: 1.2rem; }
+        
+        .footer-official { margin-top: 50px; text-align: center; color: #555; border-top: 1px solid #333; padding: 20px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <button onclick="Show('bio')">🧬 BİYOLOJİ</button>
+    <button onclick="Show('phys')">⚡ FİZİK & IŞIK</button>
+    <button onclick="Show('space')">🪐 UZAY SİSTEMİ</button>
+</nav>
+
+<div class="container">
+    
+    <div id="bio" class="section active">
+        <h1 style="color: var(--bio);">Canlı Hücre Yapısı</h1>
+        <p>Organellerin üzerine dokunarak görevlerini öğren!</p>
+        <div class="cell-box">
+            <div class="organel" style="top:40%; left:40%;" onclick="Info('ÇEKİRDEK: Hücrenin yönetim merkezidir. DNA burada bulunur.')">🔴</div>
+            <div class="organel" style="top:20%; left:30%;" onclick="Info('MİTOKONDRİ: Hücrenin enerji santralidir. Enerji üretir.')">🔋</div>
+            <div class="organel" style="top:60%; left:50%;" onclick="Info('KOFUL: Atık maddeleri depolar. Bitkilerde büyük, hayvanlarda küçüktür.')">💧</div>
+            <div class="organel" style="top:15%; left:60%;" onclick="Info('RİBOZOM: Protein sentezi yapar. En küçük organeldir.')">⚪</div>
+        </div>
+        <div id="bio-info" style="margin-top:20px; padding:15px; background:#111; border-left:5px solid var(--bio); min-height:50px;">Organel seçiniz...</div>
+    </div>
+
+    <div id="phys" class="section">
+        <h1 style="color: var(--phys);">Işık ve Maddeler</h1>
+        <div class="grid" style="display:flex; gap:20px;">
+            <div class="planet-card" onclick="Info('SAYDAM: Işığı tamamen geçirir. Örn: Cam, Hava.')">🌫️ Saydam</div>
+            <div class="planet-card" onclick="Info('YARI SAYDAM: Işığın bir kısmını geçirir. Örn: Buzlu cam, Yağlı kağıt.')">☁️ Yarı Saydam</div>
+            <div class="planet-card" onclick="Info('OPAK: Işığı hiç geçirmez. Örn: Tahta, Duvar.')">🧱 Opak</div>
+        </div>
+        <div id="phys-info" style="margin-top:20px; padding:15px; background:#111; border-left:5px solid var(--phys);">Maddelerin üzerine tıkla!</div>
+    </div>
+
+    <div id="space" class="section">
+        <h1 style="color: var(--space);">Gezegenlerde Kaç Kilosun?</h1>
+        <p>Dünya'daki kilonu yaz, diğer gezegenlerdeki ağırlığını gör:</p>
+        <input type="number" id="weight" placeholder="Kilonuzu yazın (Örn: 45)" oninput="Calc()">
+        <div class="planet-grid" style="margin-top:20px;">
+            <div class="planet-card"><h3>Ay</h3><p id="p-ay">0 kg</p></div>
+            <div class="planet-card"><h3>Mars</h3><p id="p-mars">0 kg</p></div>
+            <div class="planet-card"><h3>Jüpiter</h3><p id="p-jup">0 kg</p></div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="footer-official">
+    <p>T.C. MEB FEN BİLİMLERİ MÜFREDATI İLE UYUMLUDUR</p>
+    <p>Geliştirici: Utkan & Ekibi | LAB-X Proje Grubu</p>
+</footer>
+
+<script>
+    function Show(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function Info(txt) {
+        document.getElementById('bio-info').innerText = txt;
+        document.getElementById('phys-info').innerText = txt;
+    }
+
+    function Calc() {
+        let w = document.getElementById('weight').value;
+        if(w > 0) {
+            document.getElementById('p-ay').innerText = (w * 0.16).toFixed(1) + " kg";
+            document.getElementById('p-mars').innerText = (w * 0.38).toFixed(1) + " kg";
+            document.getElementById('p-jup').innerText = (w * 2.34).toFixed(1) + " kg";
+        }
+    }
+</script>
+</body>
+</html>
